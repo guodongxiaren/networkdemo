@@ -53,6 +53,7 @@ int main()
     int sock, i;
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(PORT);
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) <0 )
     {
