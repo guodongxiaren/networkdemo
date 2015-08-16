@@ -9,10 +9,13 @@
 #define _HEAD_H
 #include <errno.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <string.h>
-#include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
+#include <sys/wait.h>
+#include <sys/epoll.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>

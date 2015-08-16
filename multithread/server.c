@@ -2,7 +2,7 @@
 	> File Name: server.c
 	> Author: Kenshin Wang
 	> Mail: 879231132@qq.com
-	> Created Time: 2015年07月20日 星期一 14时56分09秒
+	> Created Time: 2015年08月16日 星期 15时06分09秒
  ************************************************************************/
 
 #include "head.h"
@@ -21,13 +21,13 @@ void do_something(pid_t pid, pthread_t tid, int connfd)
 {
     char buf[100];
     memset(buf, 0, sizeof(buf));
-    snprintf(buf, sizeof(buf), "您好,%d进程的%lu号线程为您服务", pid, tid);
+    snprintf(buf, sizeof(buf), "您好,%lu号线程为您服务", tid);
     printf("%s\n", buf);
     write(connfd, buf, strlen(buf));
 }
 void * child_main(void *args)
 {
-    sarg *arg = (sarg *)args;
+    sarg * arg = (void *)args;
     int listenfd = arg->listenfd;
     int addrlen = arg->addrlen;
     int connfd;
@@ -35,7 +35,7 @@ void * child_main(void *args)
     struct sockaddr *cliaddr;
 
     cliaddr = malloc(addrlen);
-    printf("process:%d--thread %lu starting...\n",getpid(), pthread_self());
+    printf("thread %lu starting...\n", pthread_self());
     for (;;)
     {
         sleep(3);
@@ -50,12 +50,8 @@ void * child_main(void *args)
     }
     return NULL;
 }
-pid_t child_make(int listenfd, int addrlen)
+void child_make(int listenfd, int addrlen)
 {
-    pid_t pid;
-    if ( (pid = fork()) >0 )
-        return pid;
-    
     pthread_t t1;
     int s;
     sarg arg;
@@ -78,25 +74,26 @@ pid_t child_make(int listenfd, int addrlen)
             err_exit("pthread_join");
         }
     }
-
 }
 
 int main()
 {
-    pid_t pids[COUNT];
     int sock, i;
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(PORT);
+
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) <0 )
     {
         err_exit("socket _failed");
     }
+
     if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
     {
         err_exit("bind failed");
     }
+
     if (listen(sock, 5) < 0)
     {
         err_exit("listen failed");

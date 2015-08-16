@@ -16,7 +16,7 @@ void do_something(pid_t spid, int connfd)
     memset(buf, 0, sizeof(buf));
     snprintf(buf, sizeof(buf), "您好,%d号进程为您服务", spid);
     printf("%s\n", buf);
-    write(connfd, buf, strlen(buf));
+    write(connfd, buf, strlen(buf)+1);
 }
 void child_main(int i, int listenfd, int addrlen)
 {

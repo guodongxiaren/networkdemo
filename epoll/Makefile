@@ -4,7 +4,7 @@ CFLAG=-I ../include
 ALL: $(BIN)
 
 %: %.c
-	gcc $(CFLAG) $^ -o $@ -lpthread
+	gcc $(CFLAG) $^ -o $@
 .PHONY:clean
 clean:
 	-rm $(BIN)
